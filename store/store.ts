@@ -1,35 +1,17 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ShoppingItem } from '../store/types';
+import { configureStore } from '@reduxjs/toolkit';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import shoppingListReducer from './slices/shoppingListSlice';
 
-const STORAGE_KEY = '@shopping_list_items';
-
-export const StorageService = {
-  async saveItems(items: ShoppingItem[]): Promise<void> {
-    try {
-      const jsonValue = JSON.stringify(items);
-      await AsyncStorage.setItem(STORAGE_KEY, jsonValue);
-    } catch (e) {
-      console.error('Error saving items:', e);
-      throw new Error('Failed to save items');
-    }
+export const store = configureStore({
+  reducer: {
+    shoppingList: shoppingListReducer,
   },
+});
 
-  async loadItems(): Promise<ShoppingItem[]> {
-    try {
-      const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
-      return jsonValue != null ? JSON.parse(jsonValue) : [];
-    } catch (e) {
-      console.error('Error loading items:', e);
-      return [];
-    }
-  },
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-  async clearItems(): Promise<void> {
-    try {
-      await AsyncStorage.removeItem(STORAGE_KEY);
-    } catch (e) {
-      console.error('Error clearing items:', e);
-      throw new Error('Failed to clear items');
-    }
-  },
-};
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export default store;

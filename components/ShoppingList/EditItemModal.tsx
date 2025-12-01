@@ -49,9 +49,12 @@ export const EditItemModal: React.FC<EditItemModalProps> = ({
       return;
     }
 
-    dispatch(editItem(item.id, {
-      name: editName.trim(),
-      quantity,
+    dispatch(editItem({
+      id: item.id,
+      updates: {
+        name: editName.trim(),
+        quantity,
+      },
     }));
 
     onClose();
