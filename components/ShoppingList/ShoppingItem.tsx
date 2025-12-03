@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { ShoppingItem as ShoppingItemType } from '../../store/types';
 
 interface ShoppingItemProps {
   item: ShoppingItemType;
   onToggle: (id: string) => void;
-  onEdit: (item: ShoppingItemType) => void;
+  onEdit?: (item: ShoppingItemType) => void;
   onDelete: (id: string) => void;
 }
 
@@ -24,7 +24,13 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = ({
         accessibilityRole="checkbox"
         accessibilityState={{ checked: item.purchased }}
       >
-        {item.purchased && <View style={styles.checkboxInner} />}
+        {item.purchased ? (
+          <Image
+            source={require('../../assets/icons/shopping-bag.png')}
+            style={styles.checkboxImage}
+            accessibilityLabel="Purchased"
+          />
+        ) : null}
       </TouchableOpacity>
 
       <View style={styles.content}>
@@ -35,21 +41,31 @@ export const ShoppingItem: React.FC<ShoppingItemProps> = ({
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => onEdit(item)}
-          accessibilityLabel={`Edit ${item.name}`}
-          accessibilityRole="button"
-        >
-          <Text style={styles.actionIcon}>✏️</Text>
-        </TouchableOpacity>
+        {onEdit && (
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => onEdit(item)}
+            accessibilityLabel={`Edit ${item.name}`}
+            accessibilityRole="button"
+          >
+            <Image
+              source={require('../../assets/icons/pen.png')}
+              style={styles.actionIconImage}
+              accessibilityLabel={`Edit ${item.name}`}
+            />
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[styles.actionButton, styles.deleteButton]}
           onPress={() => onDelete(item.id)}
           accessibilityLabel={`Delete ${item.name}`}
           accessibilityRole="button"
         >
-          <Text style={styles.actionIcon}>🗑️</Text>
+          <Image
+            source={require('../../assets/icons/bin.png')}
+            style={styles.actionIconImage}
+            accessibilityLabel={`Delete ${item.name}`}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -120,5 +136,15 @@ const styles = StyleSheet.create({
   },
   actionIcon: {
     fontSize: 18,
+  },
+  actionIconImage: {
+    width: 18,
+    height: 18,
+    resizeMode: 'contain',
+  },
+  checkboxImage: {
+    width: 16,
+    height: 16,
+    resizeMode: 'contain',
   },
 });
