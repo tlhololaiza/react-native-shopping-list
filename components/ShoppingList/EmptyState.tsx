@@ -1,10 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 export const EmptyState: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>🛒</Text>
+      <Image
+        source={require('../../assets/icons/shopping-cart.png')}
+        style={styles.icon}
+        accessibilityLabel="Empty shopping cart"
+      />
       <Text style={styles.title}>Your list is empty</Text>
       <Text style={styles.text}>Add items to your shopping list to get started</Text>
     </View>
@@ -18,7 +22,9 @@ const styles = StyleSheet.create({
     paddingVertical: 60,
   },
   icon: {
-    fontSize: 64,
+    width: 96,
+    height: 96,
+    resizeMode: 'contain',
     marginBottom: 16,
   },
   title: {
